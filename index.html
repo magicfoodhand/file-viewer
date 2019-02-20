@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CSV Viewer</title>
+    <title>File Viewer</title>
     <link href="https://unpkg.com/tabulator-tables@4.2.1/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.2.1/dist/js/tabulator.min.js"></script>
     <style>
@@ -29,7 +29,7 @@
 </head>
 
 <body>
-    <h1 id="page-title">CSV Viewer</h1>
+    <h1 id="page-title">File Viewer</h1>
     <div id="upload">
         <label for="files">Upload CSV:</label>
         <input type="file"
@@ -52,7 +52,7 @@
 
     <div id="file-display"></div>
 
-    <div id="example-table"></div>
+    <div id="file-contents"></div>
 </body>
 
 <script>
@@ -82,6 +82,7 @@
                     document.querySelector('#file-options').innerHTML = ''
                     document.querySelector('#file-display').innerHTML = ''
                     document.querySelector('#files').value = ''
+                    document.querySelector('#file-contents').value = ''
 
                     document.querySelector("#column-separator").value = API.separator
                     document.querySelector("#line-separator").value = API.lineSeparator
@@ -120,7 +121,7 @@
 
                 var header = contents[0]
 
-                new Tabulator("#example-table", {
+                new Tabulator("#file-contents", {
                     height:500, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
                     data: contents.slice(1, contents.length).map(function (value, rowIndex) {
                         var result = !header.includes("id") ? { id: rowIndex } : {}
