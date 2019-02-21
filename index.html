@@ -31,10 +31,10 @@
 <body>
     <h1 id="page-title">File Viewer</h1>
     <div id="upload">
-        <label for="files">Upload CSV:</label>
+        <label for="files">Upload File(CSV, JSON):</label>
         <input type="file"
                id="files" name="files"
-               accept="text/csv" multiple>
+               accept="application/json,text/csv" multiple>
         <div>
             <button onclick="API.deleteEverything()">Start Over</button>
             <label for="files">
@@ -93,12 +93,35 @@
                 var fileLines = []
                 var reader = new FileReader();
 
-                reader.addEventListener('load', function (e) {
-                    var csv = e.target.result || '';
-                    csv.split(API.lineSeparator).filter(function (v) { return v !== '' }).forEach(function (value) {
-                        fileLines.push(value.split(API.separator))
-                    })
-                });
+                if(file.type === 'text/csv')
+                    reader.addEventListener('load', function (e) {
+                        var csv = e.target.result || '';
+                        csv.split(API.lineSeparator).filter(function (v) { return v !== '' }).forEach(function (value) {
+                            fileLines.push(value.split(API.separator))
+                        })
+                    });
+                else
+                    reader.addEventListener('load', function (e) {
+                        var json = e.target.result || '[]';
+                        if(json[0] !== '[') {
+                            console.log('Json is not an array')
+                            json = '[' + json + ']'
+                        }
+                        var parsedJson = JSON.parse(json)
+
+                        var fields = Object.keys(parsedJson[0])
+                        var replacer = function(key, value) { return value === null || value === undefined ? '' : value }
+
+                        fileLines.push(fields) // add header column
+
+                        parsedJson.map(function(row){
+                            return fields.map(function(fieldName){
+                                return JSON.stringify(row[fieldName], replacer)
+                            })
+                        }).forEach(function (value) {
+                            fileLines.push([value])
+                        })
+                    });
 
                 reader.readAsBinaryString(file);
 
@@ -149,7 +172,8 @@
             },
 
             addFileOption: function (filename) {
-                displayedFiles.push(filename)
+                if(displayedFiles.indexOf(filename) === -1)
+                    displayedFiles.push(filename)
                 var optionContents = ''
                 for (var i = 0, len = displayedFiles.length; i < len; i++) {
                     optionContents += API.fileOption(displayedFiles[i], i)
