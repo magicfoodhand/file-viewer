@@ -7,7 +7,7 @@
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.2.1/dist/js/tabulator.min.js"></script>
     <style>
         * {
-        font-family: 'Open Sans', sans-serif;
+            font-family: 'Open Sans', sans-serif;
         }
         #file-options {
             list-style: none;
@@ -41,6 +41,8 @@
                accept="application/json,text/csv" multiple>
         <div>
             <button onclick="API.deleteEverything()">Start Over</button>
+            <fieldset>
+                <legend>CSV:</legend>
             <label for="files">
                 Column Separator:
                 <input id="column-separator" onchange="API.changeSeparator(this)">
@@ -49,6 +51,7 @@
                 Line Separator:
                 <input id="line-separator" onchange="API.changeLineSeparator(this)">
             </label>
+            </fieldset>
         </div>
     </div>
 
