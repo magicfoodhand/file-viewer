@@ -1,0 +1,23 @@
+* {
+    font-family: 'Open Sans', sans-serif;
+}
+#file-options {
+    list-style: none;
+}
+
+#file-options li {
+    display: inline;
+}
+
+#upload, #file-options {
+    max-width: 600px;
+    margin: auto;
+}
+
+#page-title {
+    text-align: center;
+}
+
+button {
+    font-size: 1em;
+}
